@@ -8,6 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TwelveFactorBookApp.DBContexts;
+using TwelveFactorBookApp.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace TwelveFactorBookApp
 {
@@ -24,6 +27,8 @@ namespace TwelveFactorBookApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+            services.AddDbContext<BookContext>(o => o.UseSqlServer(Configuration.GetConnectionString("BookDatabase")));
+            services.AddTransient<IBookRepository, BookRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
