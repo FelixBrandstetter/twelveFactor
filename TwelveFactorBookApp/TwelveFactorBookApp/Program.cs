@@ -6,10 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Serilog.AspNetCore;
+using Serilog;
 
 namespace TwelveFactorBookApp
 {
     // TODO
+    // LOGGING AUCH IM APPSETTING.JSON FILE KONFIGURIEREN
     // https://www.c-sharpcorner.com/article/microservice-using-asp-net-core/
     // https://www.c-sharpcorner.com/article/entity-framework-core-with-sql-server-in-docker-container/
     // https://docs.microsoft.com/en-us/archive/msdn-magazine/2019/april/data-points-ef-core-in-a-docker-containerized-app
@@ -26,6 +29,8 @@ namespace TwelveFactorBookApp
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                });
+                })
+            .UseSerilog((hostingContext, loggerConfiguration) =>
+                loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration));
     }
 }
