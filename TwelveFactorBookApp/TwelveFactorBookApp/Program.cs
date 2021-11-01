@@ -1,13 +1,8 @@
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Serilog.AspNetCore;
 using Serilog;
+using TwelveFactorBookApp.DBContexts;
+using TwelveFactorBookApp.Extensions;
 
 namespace TwelveFactorBookApp
 {
@@ -21,7 +16,7 @@ namespace TwelveFactorBookApp
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            CreateHostBuilder(args).Build().MigrateDatabase<BookContext>().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

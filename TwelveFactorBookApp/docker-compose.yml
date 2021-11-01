@@ -11,6 +11,7 @@ services:
 
   sql.data:  
     image: mcr.microsoft.com/mssql/server:2019-latest  
+    hostname: 'twelvefactorbookapp'
     environment:
         - SA_PASSWORD=1Secure*Password1
         - ACCEPT_EULA=Y
