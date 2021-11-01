@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Serilog;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TwelveFactorBookApp.Models;
@@ -15,10 +15,12 @@ namespace TwelveFactorBookApp.Controllers
     public class BooksController : ControllerBase
     {
         private readonly IBookRepository bookRepository;
+        private readonly ILogger<BooksController> logger;
 
-        public BooksController(IBookRepository bookRepository)
+        public BooksController(IBookRepository bookRepository, ILogger<BooksController> logger)
         {
             this.bookRepository = bookRepository;
+            this.logger = logger;
         }
 
         // GET: api/<BooksController>
@@ -27,11 +29,11 @@ namespace TwelveFactorBookApp.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
         {
-            Log.Information("This is a test");
             var books = await bookRepository.GetBooksAsync();
 
             if (books is null)
             {
+                this.logger.LogWarning("No books were avaible at the time of the call.");
                 return BadRequest();
             }
 
@@ -48,9 +50,10 @@ namespace TwelveFactorBookApp.Controllers
 
             if (book is null)
             {
+                this.logger.LogInformation($"Book with ID {id} doesn´t exist.");
                 return NotFound();
             }
-            
+
             return Ok(book);
         }
 
@@ -67,6 +70,7 @@ namespace TwelveFactorBookApp.Controllers
                 return Ok();
             }
 
+            this.logger.LogWarning("Book couldn´t be added:", book);
             return BadRequest("An error occurred");
         }
 
@@ -74,13 +78,15 @@ namespace TwelveFactorBookApp.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public  async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var successful = await this.bookRepository.DeleteBookAsync(id);
             if (successful)
             {
                 return Ok();
             }
+
+            this.logger.LogWarning($"Book couldn´t be deleted with ID {id}");
             return BadRequest("An error occurred");
         }
     }

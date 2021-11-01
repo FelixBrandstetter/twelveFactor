@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using TwelveFactorBookApp.DBContexts;
 using TwelveFactorBookApp.Models;
@@ -19,7 +17,7 @@ namespace TwelveFactorBookApp.Repositories
 
         public async Task<bool> AddBookAsync(Book book)
         {
-            var addedBook = await context.AddAsync(book);
+            _ = await context.AddAsync(book);
             await context.SaveChangesAsync();
 
             return true;

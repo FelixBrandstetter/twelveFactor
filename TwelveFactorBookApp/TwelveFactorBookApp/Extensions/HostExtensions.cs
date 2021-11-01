@@ -28,4 +28,3 @@ namespace TwelveFactorBookApp.Extensions
         }
     }
 }
-}
