@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Polly;
 using System;
 
 namespace TwelveFactorBookApp.Extensions
@@ -15,8 +17,19 @@ namespace TwelveFactorBookApp.Extensions
                 var services = scope.ServiceProvider;
                 try
                 {
+                    var retry = Policy.Handle<SqlException>()
+                        .WaitAndRetry(new TimeSpan[]
+                        {
+                            TimeSpan.FromSeconds(3),
+                            TimeSpan.FromSeconds(5),
+                            TimeSpan.FromSeconds(8),
+                            TimeSpan.FromSeconds(13),
+                            TimeSpan.FromSeconds(21),
+                        });
+
                     var db = services.GetRequiredService<T>();
-                    db.Database.Migrate();
+
+                    retry.Execute(() => db.Database.Migrate());
                 }
                 catch (Exception ex)
                 {
