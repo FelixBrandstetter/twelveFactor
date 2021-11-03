@@ -30,6 +30,7 @@ namespace TwelveFactorBookApp.Controllers
         public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
         {
             var books = await bookRepository.GetBooksAsync();
+            this.logger.LogInformation("GetBooks was called");
 
             if (books is null)
             {
@@ -47,6 +48,7 @@ namespace TwelveFactorBookApp.Controllers
         public async Task<ActionResult<Book>> Get(int id)
         {
             var book = await bookRepository.GetBookByIdAsync(id);
+            this.logger.LogInformation($"GetBook with ID {id} was called");
 
             if (book is null)
             {
@@ -64,6 +66,7 @@ namespace TwelveFactorBookApp.Controllers
         public async Task<IActionResult> AddBook([FromBody] Book book)
         {
             var successful = await this.bookRepository.AddBookAsync(book);
+            this.logger.LogInformation($"AddBook was called: Title {book.Title}, ISBN {book.ISBN}");
 
             if (successful)
             {
@@ -81,6 +84,8 @@ namespace TwelveFactorBookApp.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var successful = await this.bookRepository.DeleteBookAsync(id);
+            this.logger.LogInformation($"Delete with ID {id} was called");
+
             if (successful)
             {
                 return Ok();

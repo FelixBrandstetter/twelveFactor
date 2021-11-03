@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using Serilog;
 using TwelveFactorBookApp.DBContexts;
 using TwelveFactorBookApp.Extensions;
+using Microsoft.Extensions.Logging;
 
 namespace TwelveFactorBookApp
 {
@@ -21,11 +21,14 @@ namespace TwelveFactorBookApp
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                 .ConfigureLogging(logging =>
+                 {
+                     logging.ClearProviders();
+                     logging.AddConsole();
+                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                })
-            .UseSerilog((hostingContext, loggerConfiguration) =>
-                loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration));
+                });
     }
 }
