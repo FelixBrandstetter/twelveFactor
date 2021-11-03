@@ -6,12 +6,6 @@ using Microsoft.Extensions.Logging;
 
 namespace TwelveFactorBookApp
 {
-    // TODO
-    // LOGGING AUCH IM APPSETTING.JSON FILE KONFIGURIEREN
-    // https://www.c-sharpcorner.com/article/microservice-using-asp-net-core/
-    // https://www.c-sharpcorner.com/article/entity-framework-core-with-sql-server-in-docker-container/
-    // https://docs.microsoft.com/en-us/archive/msdn-magazine/2019/april/data-points-ef-core-in-a-docker-containerized-app
-    // https://docs.microsoft.com/en-us/archive/msdn-magazine/2017/july/data-points-on-the-fly-sql-servers-with-docker
     public class Program
     {
         public static void Main(string[] args)
